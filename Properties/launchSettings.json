@@ -10,7 +10,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https": {
+    "EmptyMvcProject": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
