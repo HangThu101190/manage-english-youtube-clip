@@ -1,0 +1,12 @@
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+packages/
+*.suo
+*.userprefs
+MvcProject/bin/
+MvcProject/obj/
+MvcProject/bin/
+MvcProject/obj/
