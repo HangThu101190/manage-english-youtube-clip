@@ -6,6 +6,6 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return Content("Hello World");
+        return RedirectToAction("Index", "Playlists");
     }
 }
