@@ -4,36 +4,45 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="d-flex justify-content-end mb-3 mt-4">
+    <a asp-action="Create" class="btn btn-outline-danger fw-bold rounded-0 border-2">Add Playlist</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<style>
+    .table-red-borders {
+        border: 2px solid red;
+    }
+    .table-red-borders th,
+    .table-red-borders td {
+        border: 2px solid red;
+        color: red;
+    }
+</style>
+
+<table class="table table-bordered text-center align-middle table-red-borders">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th></th>
+            <th class="fs-4">Id</th>
+            <th class="fs-4">Name</th>
+            <th class="fs-4">Type</th>
+            <th class="fs-4">Action</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="fs-5">
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td class="fs-5">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="fs-5">
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger text-decoration-none fw-bold fs-5 me-2">Remove</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id" class="text-danger text-decoration-none fw-bold fs-5 ms-2">Edit</a>
             </td>
         </tr>
 }
