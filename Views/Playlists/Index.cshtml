@@ -6,9 +6,39 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
     <h2 class="text-primary fw-bold mb-0">Playlist Management</h2>
-    <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 fw-bold">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary shadow-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">
         + Add Playlist
-    </a>
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h1 class="modal-title fs-4 text-primary fw-bold" id="createPlaylistModalLabel">New Playlist</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form asp-action="Create" method="post">
+          <div class="modal-body pt-4">
+                <div class="form-floating mb-3">
+                    <input name="Name" class="form-control" id="floatingName" placeholder="Playlist Name" required />
+                    <label for="floatingName">Playlist Name</label>
+                </div>
+
+                <div class="form-floating mb-2">
+                    <input name="Type" class="form-control" id="floatingType" placeholder="Playlist Type" required />
+                    <label for="floatingType">Playlist Type</label>
+                </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-outline-secondary rounded-pill fw-bold" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill fw-bold px-4">Create</button>
+          </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="card shadow-sm border-0 rounded-3">
