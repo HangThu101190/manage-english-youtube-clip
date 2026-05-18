@@ -9,6 +9,7 @@ using EmptyMvcProject.Data;
 using EmptyMvcProject.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace EmptyMvcProject.Controllers
 {
@@ -100,6 +101,48 @@ namespace EmptyMvcProject.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadQuestionImage(int id, IFormFile questionImage)
+        {
+            var video = await _context.Videos.FindAsync(id);
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            if (questionImage != null && questionImage.Length > 0)
+            {
+                string webRootPath = _hostEnvironment.WebRootPath;
+                if (string.IsNullOrWhiteSpace(webRootPath))
+                {
+                    webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                }
+
+                string uploadsFolder = Path.Combine(webRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string fileExtension = Path.GetExtension(questionImage.FileName);
+                string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await questionImage.CopyToAsync(fileStream);
+                }
+
+                video.Question = "/uploads/" + uniqueFileName;
+                _context.Update(video);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index), new { playlistId = video.PlaylistId });
+        }
+
 
         // GET: Videos/Answer/5
         public async Task<IActionResult> Answer(int? id)

@@ -74,7 +74,6 @@
             <table class="table table-hover table-striped align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th>Name</th>
                         <th>Description</th>
                         <th>Question</th>
                         <th>Uploaded</th>
@@ -84,20 +83,24 @@
                 <tbody>
             @foreach (var item in Model) {
                     <tr>
-                        <td class="fw-bold">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            <a asp-action="Answer" asp-route-id="@item.Id" class="text-decoration-none hover-primary">
                             @if (!string.IsNullOrEmpty(item.Question)) {
-                                <img src="@item.Question" alt="Question Image" style="max-height: 50px; max-width: 100px;" class="img-thumbnail" />
-                            } else {
-                                <span class="text-muted">(No image)</span>
+                                <img src="@item.Question" alt="Question Image" style="max-height: 50px; max-width: 100px;" class="img-thumbnail mb-2 d-block" />
                             }
-                            </a>
+                            <form asp-action="UploadQuestionImage" method="post" enctype="multipart/form-data" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <label class="btn btn-sm btn-outline-primary" style="cursor: pointer;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload me-1" viewBox="0 0 16 16">
+                                      <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                      <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                                    </svg>
+                                    Upload
+                                    <input type="file" name="questionImage" accept="image/*" class="d-none" onchange="this.form.submit()" />
+                                </label>
+                            </form>
                         </td>
                         <td>
                             @if(item.IsUploaded) {
@@ -107,6 +110,7 @@
                             }
                         </td>
                         <td class="text-center pe-4">
+                            <a asp-action="Answer" asp-route-id="@item.Id" class="btn btn-sm btn-primary rounded-pill px-3 me-2">Answer</a>
                             <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2">Edit</button>
                             <button class="btn btn-sm btn-outline-danger rounded-pill px-3">Remove</button>
                         </td>
@@ -115,7 +119,7 @@
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
+                        <td colspan="4" class="text-center py-5 text-muted">
                             No videos found in this playlist. Click "+ Add Video" to create one.
                         </td>
                     </tr>
