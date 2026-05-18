@@ -15,13 +15,13 @@
     <div class="col-md-6 mb-4">
         <div class="card shadow-sm border-0 h-100 rounded-3">
             <div class="card-header bg-light border-0 pt-3 pb-2">
-                <h5 class="mb-0 fw-bold text-dark">Question</h5>
+                <h5 class="mb-0 fw-bold text-dark">Question Image</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body text-center d-flex flex-column justify-content-center">
                 @if(string.IsNullOrEmpty(Model.Question)) {
-                    <p class="text-muted fst-italic">No question has been provided for this video.</p>
+                    <p class="text-muted fst-italic">No question image has been provided for this video.</p>
                 } else {
-                    <p class="fs-5">@Model.Question</p>
+                    <img src="@Model.Question" alt="Question Image" class="img-fluid rounded shadow-sm" style="max-height: 400px; object-fit: contain;" />
                 }
             </div>
         </div>

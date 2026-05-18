@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace EmptyMvcProject.Models
 {
@@ -10,6 +12,7 @@ namespace EmptyMvcProject.Models
         public bool IsUploaded { get; set; } = false;
         public string Name { get; set; } = string.Empty;
         public string? Url { get; set; }
+        public string? Description { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
         // Foreign Key
@@ -17,5 +20,8 @@ namespace EmptyMvcProject.Models
 
         // Navigation property
         public Playlist? Playlist { get; set; }
+
+        [NotMapped]
+        public IFormFile? QuestionImage { get; set; }
     }
 }

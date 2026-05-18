@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EmptyMvcProject.Data;
 using EmptyMvcProject.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace EmptyMvcProject.Controllers
 {
     public class VideosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public VideosController(ApplicationDbContext context)
+        public VideosController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Videos?playlistId=5
@@ -45,10 +49,39 @@ namespace EmptyMvcProject.Controllers
         // POST: Videos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Question,Answer,Url,IsUploaded,PlaylistId")] Video video)
+        public async Task<IActionResult> Create([Bind("Name,Answer,Url,Description,IsUploaded,PlaylistId,QuestionImage")] Video video)
         {
             if (ModelState.IsValid)
             {
+                if (video.QuestionImage != null && video.QuestionImage.Length > 0)
+                {
+                    // Ensure wwwroot path exists
+                    string webRootPath = _hostEnvironment.WebRootPath;
+                    if (string.IsNullOrWhiteSpace(webRootPath))
+                    {
+                        webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                    }
+
+                    string uploadsFolder = Path.Combine(webRootPath, "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Sanitize file name
+                    string fileExtension = Path.GetExtension(video.QuestionImage.FileName);
+                    string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await video.QuestionImage.CopyToAsync(fileStream);
+                    }
+
+                    // Save file path to database
+                    video.Question = "/uploads/" + uniqueFileName;
+                }
+
                 video.Created = DateTime.UtcNow;
                 _context.Add(video);
                 await _context.SaveChangesAsync();
