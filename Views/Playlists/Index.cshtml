@@ -60,7 +60,8 @@
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>
                         <td class="fw-bold">
-                            @Html.DisplayFor(modelItem => item.Name)
+                            <a asp-controller="Videos" asp-action="Index" asp-route-playlistId="@item.Id" class="text-decoration-none text-dark hover-primary">
+                            @Html.DisplayFor(modelItem => item.Name)</a>
                         </td>
                         <td>
                             <span class="badge bg-info text-dark rounded-pill px-3">

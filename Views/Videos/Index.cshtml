@@ -1,0 +1,115 @@
+@model IEnumerable<EmptyMvcProject.Models.Video>
+
+@{
+    ViewData["Title"] = ViewData["PlaylistName"] + " Videos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+    <div>
+        <a asp-controller="Playlists" asp-action="Index" class="text-decoration-none text-secondary small mb-2 d-inline-block">&larr; Back to Playlists</a>
+        <h2 class="text-primary fw-bold mb-0">@ViewData["PlaylistName"] Video</h2>
+    </div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary shadow-sm rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#createVideoModal">
+        + Add Video
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createVideoModal" tabindex="-1" aria-labelledby="createVideoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-bottom-0 pb-0">
+        <h1 class="modal-title fs-4 text-primary fw-bold" id="createVideoModalLabel">New Video</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form asp-action="Create" method="post">
+          <input type="hidden" name="PlaylistId" value="@ViewData["PlaylistId"]" />
+          <div class="modal-body pt-4">
+                <div class="form-floating mb-3">
+                    <input name="Name" class="form-control" id="floatingVideoName" placeholder="Video Name" required />
+                    <label for="floatingVideoName">Video Name</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input name="Question" class="form-control" id="floatingQuestion" placeholder="Question" />
+                    <label for="floatingQuestion">Question</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input name="Answer" class="form-control" id="floatingAnswer" placeholder="Answer" />
+                    <label for="floatingAnswer">Answer</label>
+                </div>
+
+                <div class="form-floating mb-2">
+                    <input name="Url" class="form-control" id="floatingUrl" placeholder="Video URL" />
+                    <label for="floatingUrl">Video URL</label>
+                </div>
+
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" name="IsUploaded" value="true" id="flexCheckUploaded">
+                    <label class="form-check-label" for="flexCheckUploaded">
+                        Is Uploaded?
+                    </label>
+                </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-outline-secondary rounded-pill fw-bold" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill fw-bold px-4">Create</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm border-0 rounded-3">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Id</th>
+                        <th>Name</th>
+                        <th>Question</th>
+                        <th>Uploaded</th>
+                        <th class="text-center pe-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td class="ps-4 fw-medium text-secondary">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td class="fw-bold">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Question)
+                        </td>
+                        <td>
+                            @if(item.IsUploaded) {
+                                <span class="badge bg-success rounded-pill">Yes</span>
+                            } else {
+                                <span class="badge bg-secondary rounded-pill">No</span>
+                            }
+                        </td>
+                        <td class="text-center pe-4">
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill px-3">Remove</button>
+                        </td>
+                    </tr>
+            }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            No videos found in this playlist. Click "+ Add Video" to create one.
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
