@@ -1,0 +1,57 @@
+@model EmptyMvcProject.Models.Video
+
+@{
+    ViewData["Title"] = "Answer Question";
+}
+
+<div class="mb-4 mt-4">
+    <a asp-controller="Videos" asp-action="Index" asp-route-playlistId="@Model.PlaylistId" class="text-decoration-none text-secondary small d-inline-block mb-3">&larr; Back to Videos</a>
+    <h2 class="text-primary fw-bold">Answer Video Question</h2>
+    <p class="text-muted">Video: @Model.Name</p>
+</div>
+
+<div class="row">
+    <!-- Block 1: Left side (Question) -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 h-100 rounded-3">
+            <div class="card-header bg-light border-0 pt-3 pb-2">
+                <h5 class="mb-0 fw-bold text-dark">Question</h5>
+            </div>
+            <div class="card-body">
+                @if(string.IsNullOrEmpty(Model.Question)) {
+                    <p class="text-muted fst-italic">No question has been provided for this video.</p>
+                } else {
+                    <p class="fs-5">@Model.Question</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Block 2: Right side (Answer Form) -->
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm border-0 h-100 rounded-3">
+            <div class="card-header bg-light border-0 pt-3 pb-2">
+                <h5 class="mb-0 fw-bold text-dark">Your Answer</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Answer">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group mb-4">
+                        <textarea asp-for="Answer" class="form-control" rows="8" placeholder="Type your answer here..."></textarea>
+                        <span asp-validation-for="Answer" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Save Answer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -67,5 +67,70 @@ namespace EmptyMvcProject.Controllers
             }
             return NotFound();
         }
+
+        // GET: Videos/Answer/5
+        public async Task<IActionResult> Answer(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var video = await _context.Videos
+                .Include(v => v.Playlist)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            return View(video);
+        }
+
+        // POST: Videos/Answer/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Answer(int id, [Bind("Id,Answer")] Video updatedVideo)
+        {
+            if (id != updatedVideo.Id)
+            {
+                return NotFound();
+            }
+
+            var video = await _context.Videos.FindAsync(id);
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    video.Answer = updatedVideo.Answer;
+                    _context.Update(video);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VideoExists(video.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index), new { playlistId = video.PlaylistId });
+            }
+            return View(video);
+        }
+
+        private bool VideoExists(int id)
+        {
+            return _context.Videos.Any(e => e.Id == id);
+        }
     }
 }

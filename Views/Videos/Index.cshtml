@@ -82,7 +82,7 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Question)
+                            <a asp-action="Answer" asp-route-id="@item.Id" class="text-decoration-none hover-primary text-dark">@(string.IsNullOrEmpty(item.Question) ? "(No question)" : item.Question)</a>
                         </td>
                         <td>
                             @if(item.IsUploaded) {
