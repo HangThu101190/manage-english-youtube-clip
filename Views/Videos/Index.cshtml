@@ -6,6 +6,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
     <div>
+        <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-secondary small mb-2 d-inline-block me-3">&larr; Back to Home</a>
         <a asp-controller="Playlists" asp-action="Index" class="text-decoration-none text-secondary small mb-2 d-inline-block">&larr; Back to Playlists</a>
         <h2 class="text-primary fw-bold mb-0">@ViewData["PlaylistName"] Video</h2>
     </div>
@@ -68,7 +69,6 @@
             <table class="table table-hover table-striped align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="ps-4">Id</th>
                         <th>Name</th>
                         <th>Question</th>
                         <th>Uploaded</th>
@@ -78,9 +78,6 @@
                 <tbody>
             @foreach (var item in Model) {
                     <tr>
-                        <td class="ps-4 fw-medium text-secondary">
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
                         <td class="fw-bold">
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
@@ -103,7 +100,7 @@
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
+                        <td colspan="4" class="text-center py-5 text-muted">
                             No videos found in this playlist. Click "+ Add Video" to create one.
                         </td>
                     </tr>
