@@ -56,7 +56,6 @@ namespace EmptyMvcProject.Controllers
             {
                 if (video.QuestionImage != null && video.QuestionImage.Length > 0)
                 {
-                    // Ensure wwwroot path exists
                     string webRootPath = _hostEnvironment.WebRootPath;
                     if (string.IsNullOrWhiteSpace(webRootPath))
                     {
@@ -69,7 +68,6 @@ namespace EmptyMvcProject.Controllers
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    // Sanitize file name
                     string fileExtension = Path.GetExtension(video.QuestionImage.FileName);
                     string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
 
@@ -79,7 +77,6 @@ namespace EmptyMvcProject.Controllers
                         await video.QuestionImage.CopyToAsync(fileStream);
                     }
 
-                    // Save file path to database
                     video.Question = "/uploads/" + uniqueFileName;
                 }
 
@@ -89,7 +86,6 @@ namespace EmptyMvcProject.Controllers
                 return RedirectToAction(nameof(Index), new { playlistId = video.PlaylistId });
             }
 
-            // If we fail, reload the Index view with the playlist data
             var playlist = await _context.Playlists
                 .Include(p => p.Videos)
                 .FirstOrDefaultAsync(m => m.Id == video.PlaylistId);
@@ -202,6 +198,42 @@ namespace EmptyMvcProject.Controllers
                 return RedirectToAction(nameof(Index), new { playlistId = video.PlaylistId });
             }
             return View(video);
+        }
+
+        // GET: Videos/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var video = await _context.Videos
+                .Include(v => v.Playlist)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (video == null)
+            {
+                return NotFound();
+            }
+
+            return View(video);
+        }
+
+        // POST: Videos/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var video = await _context.Videos.FindAsync(id);
+            if (video != null)
+            {
+                int playlistId = video.PlaylistId;
+                _context.Videos.Remove(video);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { playlistId = playlistId });
+            }
+            return NotFound();
         }
 
         private bool VideoExists(int id)

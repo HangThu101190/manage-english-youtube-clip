@@ -1,7 +1,7 @@
-@model EmptyMvcProject.Models.Playlist
+@model EmptyMvcProject.Models.Video
 
 @{
-    ViewData["Title"] = "Delete Playlist";
+    ViewData["Title"] = "Delete Video";
 }
 
 <div class="container mt-5">
@@ -12,24 +12,24 @@
                     <h4 class="mb-0 fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirm Deletion</h4>
                 </div>
                 <div class="card-body p-4 text-center">
-                    <h5 class="card-title text-danger fw-bold mb-3">Are you sure you want to delete this playlist?</h5>
-                    <p class="card-text text-muted mb-4">This action cannot be undone. All videos within this playlist will also be removed.</p>
+                    <h5 class="card-title text-danger fw-bold mb-3">Are you sure you want to delete this video?</h5>
+                    <p class="card-text text-muted mb-4">This action cannot be undone.</p>
 
                     <div class="bg-light rounded p-3 mb-4 text-start">
                         <div class="row mb-2">
-                            <div class="col-sm-4 fw-bold text-secondary">Playlist Name</div>
-                            <div class="col-sm-8 text-dark fs-5 fw-semibold">@Html.DisplayFor(model => model.Name)</div>
+                            <div class="col-sm-4 fw-bold text-secondary">Description</div>
+                            <div class="col-sm-8 text-dark fs-5 fw-semibold">@Html.DisplayFor(model => model.Description)</div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4 fw-bold text-secondary">Type</div>
+                            <div class="col-sm-4 fw-bold text-secondary">Uploaded</div>
                             <div class="col-sm-8 text-dark">
-                                @if (string.IsNullOrEmpty(Model.Type))
+                                @if (Model.IsUploaded)
                                 {
-                                    <span class="fst-italic text-muted">No Type Specified</span>
+                                    <span class="badge bg-success rounded-pill">Yes</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary rounded-pill">@Html.DisplayFor(model => model.Type)</span>
+                                    <span class="badge bg-secondary rounded-pill">No</span>
                                 }
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="Id" />
                         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-3">
-                            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-bold shadow-sm">Cancel</a>
+                            <a asp-action="Index" asp-route-playlistId="@Model.PlaylistId" class="btn btn-outline-secondary rounded-pill px-4 fw-bold shadow-sm">Cancel</a>
                             <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Yes, Delete It</button>
                         </div>
                     </form>
